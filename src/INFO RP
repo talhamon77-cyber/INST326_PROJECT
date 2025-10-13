@@ -131,3 +131,37 @@ def generate_market_insights_report(products):
         "overall_return_rate": round(overall_return_rate, 3),
         "top_product": top_product
     }
+
+# Simple Function
+# parse_search_query()
+# Purpose: This function takes a user's search string and extracts keywords or filters to help locate relevant data.
+# Example: This is splitting input text into searchable terms.
+def parse_search_query(query):
+    return [word.lower() for word in query.split() if word.isalnum()]
+
+# Medium Function
+# calculate_statistical_summary()
+# Purpose: This function is used to create key statistics from a dataset for analysis.
+# Example: This is summarizing numeric columns in a DataFrame or list. 
+import statistics
+
+def calculate_statistical_summary(data):
+    return {
+        "mean": statistics.mean(data), 
+        "median": statistics.median(data), 
+        "stdev": statistics.stdev(data)
+    }
+
+# Complex Function
+# predict_trend()
+# Purpose: This function uses previous data points to predict future values or identify growth/decline patterns using regression.
+# Example: This is performing a simple linear regression to predict trends.
+
+import numpy as np
+
+def predict_trend(data):
+    x = np.arange(len(data))
+    y = np.array(data)
+    coefficients = np.polyfit(x, y, 1)
+    trend_line = np.polyval(coefficients, x)
+    return {"slope": coefficients[0], "intercept": coefficients[1], "trend_line": trend_line.tolist()}
