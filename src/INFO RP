@@ -146,7 +146,7 @@ def calculate_statistical_summary(data):
         "stdev": statistics.stdev(data)
     }
 
-
+pip install numpy
 import numpy as np
 
 def predict_trend(data):
