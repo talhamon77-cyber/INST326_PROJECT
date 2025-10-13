@@ -1,6 +1,6 @@
 
 def validate_experiment_parameters(params):
-    """Validate key experiment parameters for consumer trend analysis.
+    #Validate key experiment parameters for consumer trend analysis.
     
     Args:
         params (dict): Dictionary containing experiment parameters 
@@ -12,7 +12,7 @@ def validate_experiment_parameters(params):
     Raises:
         ValueError: If parameters are missing or invalid.
         TypeError: If data types are incorrect.
-    """
+    
     required = ["sales", "satisfaction", "price"]
     
     for key in required:
@@ -27,7 +27,7 @@ def validate_experiment_parameters(params):
 
 
 def analyze_product_performance(sales, returns, satisfaction):
-    """Analyze a product's performance using sales, return rate, and satisfaction score.
+    #Analyze a product's performance using sales, return rate, and satisfaction score.
     
     Args:
         sales (int | float): Total number of units sold.
@@ -41,7 +41,6 @@ def analyze_product_performance(sales, returns, satisfaction):
         ValueError: If inputs are invalid or out of range.
         TypeError: If input types are incorrect.
     
-    """
     # Input validation
     if not all(isinstance(x, (int, float)) for x in [sales, returns, satisfaction]):
         raise TypeError("All inputs must be numeric.")
@@ -73,7 +72,7 @@ def analyze_product_performance(sales, returns, satisfaction):
 
 
 def generate_market_insights_report(products):
-    """Generate a market insights report summarizing product performance.
+    #Generate a market insights report summarizing product performance.
     
     Args:
         products (list[dict]): List of product data dictionaries with keys 
@@ -87,7 +86,7 @@ def generate_market_insights_report(products):
     
     Raises:
         ValueError: If list is empty or data incomplete.
-    """
+    
     if not products:
         raise ValueError("Product list cannot be empty.")
     
@@ -155,3 +154,79 @@ def predict_trend(data):
     coefficients = np.polyfit(x, y, 1)
     trend_line = np.polyval(coefficients, x)
     return {"slope": coefficients[0], "intercept": coefficients[1], "trend_line": trend_line.tolist()}
+
+class ReturnReport:
+    def __init__(self): #defining the function for sales and returns
+        self.sales = {}
+        self.returns = {}
+
+    def add_sales(self, product_id, quantity): #adding a quantity (+1) to a product if the product id isn't in sales
+        if product_id not in self.sales:
+            self.sales[product_id] = 0
+        self.sales[product_id] += quantity
+
+    def add_return(self, product_id, quantity): #adding a quantity (+1) to returns if the product id isnt it self returns
+        if product_id not in self.returns:
+            self.returns[product_id] = 0
+        self.returns[product_id] += quantity
+
+    def _calc_return_rate(self, sold, returned): #calculating the return rate 
+        if sold > 0:
+            return round((returned / sold) * 100, 2)
+        else:
+            return 0
+    def generate_report(self): #using formulas to generate the totals for both sales and returns 
+        report = {}
+        total_sold = sum(self.sales.values())
+        total_returned = sum(self.returns.get(product_id, 0) for product_id in self.sales)
+
+        #per product report
+
+        for product_id, sold in self.sales.items():
+            returned = self.returns.get(product_id, 0)
+            report[product_id] = {
+                "Sold": sold,
+                "Returned": returned,
+                "Return Rate (%)": self._calc_return_rate(sold, returned)
+            }
+
+        # overall summary
+        report["Overall"] = {
+            "Total Sold": total_sold,
+            "Total Returned": total_returned,
+            "Overall Return Rate (%)": self._calc_return_rate(total_sold, total_returned)
+        }
+
+        return report
+
+
+class TextOrganizer: # class to organize categories
+    def __init__(self):
+        self.categories = {}
+
+    def clean_text_content(self, data_list, category_allowed): #cleaning the cateogories
+
+        self.categories = {category: [] for category in category_allowed}
+
+        for item in data_list: #for every item in the data list
+            cleaned_item = item.strip().lower() #strip the item of any whitespaces and make it lowercase
+            categorized = False
+            for category, allowed in category_allowed.items(): #for every category in the allowed category
+                if allowed(cleaned_item):
+                    self.categories[category].append(cleaned_item) #add it to the cleaned item list
+                    categorized = True
+                    break
+            if not categorized: #if its not categorized 
+                self.categories.setdefault("uncategorized", []).append(cleaned_item) #set it to uncategorized and add it to the end of the clean list
+        return self.categories
+
+class ParticipantData:
+    def __init__(self):
+        self.participants = []
+
+    def add_participant(self, name):
+        self.participants.append(name)
+
+    def anonymize_participant_data(self):
+        # Simple formatting-based anonymization: replace names with numbered labels
+        return [f"Participant_{i+1}" for i in range(len(self.participants))]
