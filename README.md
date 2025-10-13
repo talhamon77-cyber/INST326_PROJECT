@@ -48,46 +48,67 @@ print(data.anonymize_participant_data())
 report = ReturnReport()
 
 #Add sales
+
 report.add_sales("P1", 200)
+
 report.add_sales("P2", 50)
+
 report.add_sales("P3", 120)
 
 #Add returns
+
 report.add_return("P1", 4)
+
 report.add_return("P2", 2)
+
 report.add_return("P3", 10)
 
 #Show only the formatted report
+
 report.display_report()
 
-
-
 #For cleaning text
+
 #Sample data
+
 data = [
-    "Apple pie recipe",
-    "Banana smoothie",
-    "Python tutorial",
-    "Cherry tart",
-    "Learn Java",
-    "Random note"
+"Apple pie recipe",
+
+"Banana smoothie",
+
+"Python tutorial",
+
+"Cherry tart",
+
+"Learn Java",
+
+"Random note"
+
 ]
 
 #Functions to check categories
 def is_fruit(text):
-    return any(fruit in text for fruit in ["apple", "banana", "cherry"])
+    
+   return any(fruit in text for fruit in ["apple", "banana", "cherry"])
 
 def is_programming(text):
-    return any(lang in text for lang in ["python", "java"])
+    
+   return any(lang in text for lang in ["python", "java"])
 
 #Define category rules
+
 categories = {
-    "fruits": is_fruit,
-    "programming": is_programming
+    
+   "fruits": is_fruit,
+    
+   "programming": is_programming
+   
 }
 
 #Create organizer
+
 organizer = TextOrganizer()
+
 organizer.clean_text_content(data, categories)
 
 #Display only the formatted report
