@@ -230,3 +230,56 @@ class ParticipantData:
     def anonymize_participant_data(self):
         # Simple formatting-based anonymization: replace names with numbered labels
         return [f"Participant_{i+1}" for i in range(len(self.participants))]
+
+class ValidationError(ValueError):
+    """Raised when input validation fails."""
+
+
+class DataParseError(ValueError):
+    """Raised when data parsing fails."""
+
+
+def validate_url_format(url: str, allowed_schemes: Iterable[str] = ("http", "https")) -> bool:
+    """Simple: Validate URL format."""
+    if not isinstance(url, str):
+        raise TypeError("url must be a string")
+    parsed = urlparse(url.strip())
+    if parsed.scheme not in allowed_schemes or not parsed.netloc:
+        return False
+    return True
+
+
+def parse_csv_data(csv_text: str, *, has_header: bool = True) -> Union[List[Dict[str, str]], List[List[str]]]:
+    """Medium: Parse CSV text into structured rows with optional header validation."""
+    if not isinstance(csv_text, str):
+        raise TypeError("csv_text must be a string")
+    reader = csv.reader(StringIO(csv_text))
+    rows = [r for r in reader]
+    if not has_header:
+        return rows
+    header = rows[0]
+    data = [dict(zip(header, row)) for row in rows[1:]]
+    return data
+
+
+def extract_keywords(
+    text: str,
+    *,
+    min_length: int = 3,
+    stopwords: Optional[Iterable[str]] = None,
+    top_n: Optional[int] = None
+) -> List[str]:
+    """Complex: Extract frequent keywords from text with filtering and ranking."""
+    if not isinstance(text, str):
+        raise TypeError("text must be a string")
+    if min_length < 1:
+        raise ValueError("min_length must be at least 1")
+
+    text = text.lower()
+    tokens = re.findall(r"[a-z]+", text)
+    stopwords = set(stopwords or [])
+    words = [t for t in tokens if len(t) >= min_length and t not in stopwords]
+
+    freq = Counter(words)
+    sorted_words = [word for word, _ in freq.most_common(top_n)]
+    return sorted_words
