@@ -37,8 +37,11 @@ A Python library to help businesses identify, analyze, and predict future trends
 #For Anonymizing data
 
 data = ParticipantData()
+
 data.add_participant("Alice")
+
 data.add_participant("Bob")
+
 print(data.anonymize_participant_data())
 
 #For Cleaning Content
