@@ -1,0 +1,133 @@
+
+def validate_experiment_parameters(params):
+    """Validate key experiment parameters for consumer trend analysis.
+    
+    Args:
+        params (dict): Dictionary containing experiment parameters 
+                       (e.g., {"sales": 1200, "satisfaction": 4.5, "price": 19.99})
+    
+    Returns:
+        bool: True if all parameters are valid.
+    
+    Raises:
+        ValueError: If parameters are missing or invalid.
+        TypeError: If data types are incorrect.
+    """
+    required = ["sales", "satisfaction", "price"]
+    
+    for key in required:
+        if key not in params:
+            raise ValueError(f"Missing parameter: {key}")
+        if not isinstance(params[key], (int, float)):
+            raise TypeError(f"{key} must be numeric")
+        if params[key] < 0:
+            raise ValueError(f"{key} cannot be negative")
+    
+    return True
+
+
+def analyze_product_performance(sales, returns, satisfaction):
+    """Analyze a product's performance using sales, return rate, and satisfaction score.
+    
+    Args:
+        sales (int | float): Total number of units sold.
+        returns (int | float): Number of returned products.
+        satisfaction (float): Average customer satisfaction score (1–5 scale).
+    
+    Returns:
+        dict: Performance summary containing return rate, performance score, and rating.
+    
+    Raises:
+        ValueError: If inputs are invalid or out of range.
+        TypeError: If input types are incorrect.
+    
+    """
+    # Input validation
+    if not all(isinstance(x, (int, float)) for x in [sales, returns, satisfaction]):
+        raise TypeError("All inputs must be numeric.")
+    if sales <= 0 or returns < 0:
+        raise ValueError("Sales must be > 0 and returns cannot be negative.")
+    if not 0 <= satisfaction <= 5:
+        raise ValueError("Satisfaction must be between 0 and 5.")
+    
+    # Compute key metrics
+    return_rate = returns / sales
+    performance_score = (satisfaction / 5) * (1 - return_rate)
+    
+    # Categorize performance
+    if performance_score >= 0.8:
+        rating = "Excellent"
+    elif performance_score >= 0.6:
+        rating = "Good"
+    elif performance_score >= 0.4:
+        rating = "Average"
+    else:
+        rating = "Poor"
+    
+    return {
+        "return_rate": round(return_rate, 3),
+        "performance_score": round(performance_score, 2),
+        "rating": rating
+    }
+
+
+
+def generate_market_insights_report(products):
+    """Generate a market insights report summarizing product performance.
+    
+    Args:
+        products (list[dict]): List of product data dictionaries with keys 
+            'name', 'sales', 'returns', and 'satisfaction'.
+    Returns:
+        dict: Report containing:
+            - ranked_products: List of products sorted by performance score.
+            - average_satisfaction: Average satisfaction across all products.
+            - overall_return_rate: Average return rate.
+            - top_product: Name of best-performing product.
+    
+    Raises:
+        ValueError: If list is empty or data incomplete.
+    """
+    if not products:
+        raise ValueError("Product list cannot be empty.")
+    
+    ranked_products = []
+    total_satisfaction = 0
+    total_returns = 0
+    total_sales = 0
+    
+    for p in products:
+        required = ["name", "sales", "returns", "satisfaction"]
+        if not all(k in p for k in required):
+            raise ValueError(f"Missing data for product: {p}")
+        
+        sales, returns, satisfaction = p["sales"], p["returns"], p["satisfaction"]
+        if not all(isinstance(x, (int, float)) for x in [sales, returns, satisfaction]):
+            raise TypeError(f"Invalid data types in product: {p['name']}")
+        
+        return_rate = returns / sales if sales > 0 else 0
+        performance_score = (satisfaction / 5) * (1 - return_rate)
+        
+        ranked_products.append({
+            "name": p["name"],
+            "performance_score": round(performance_score, 2),
+            "return_rate": round(return_rate, 3),
+            "satisfaction": satisfaction
+        })
+        
+        total_satisfaction += satisfaction
+        total_returns += returns
+        total_sales += sales
+    
+    ranked_products.sort(key=lambda x: x["performance_score"], reverse=True)
+    
+    average_satisfaction = total_satisfaction / len(products)
+    overall_return_rate = total_returns / total_sales if total_sales > 0 else 0
+    top_product = ranked_products[0]["name"]
+    
+    return {
+        "ranked_products": ranked_products,
+        "average_satisfaction": round(average_satisfaction, 2),
+        "overall_return_rate": round(overall_return_rate, 3),
+        "top_product": top_product
+    }
