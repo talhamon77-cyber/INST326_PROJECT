@@ -23,3 +23,14 @@ A Python library to help businesses identify, analyze, and predict future trends
 - Specific pattern to these trends
 - Pricing and how it affects consumer rates
 - Possible trending topics
+
+## Installation and Setup
+1. Clone this repository:
+   ```bash
+   https://github.com/talhamon77-cyber/INST326_PROJECT.git
+   ```
+
+2. No external dependencies required - uses Python standard library only
+
+## Quick Usage Examples
+
