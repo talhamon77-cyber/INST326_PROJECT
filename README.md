@@ -27,7 +27,8 @@ A Python library to help businesses identify, analyze, and predict future trends
 ## Installation and Setup
 1. Clone this repository:
    ```bash
-   git clone https://github.com/talhamon77-cyber/INST326_PROJECT.git
+   git clone
+   https://github.com/talhamon77-cyber/INST326_PROJECT.git
    ```
 
 2. No external dependencies required - uses Python standard library only
