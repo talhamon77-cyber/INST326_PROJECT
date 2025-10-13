@@ -45,6 +45,7 @@ data.add_participant("Bob")
 print(data.anonymize_participant_data())
 
 #For Cleaning Content
+
 report = ReturnReport()
 
 #Add sales
