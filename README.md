@@ -88,6 +88,7 @@ data = [
 ]
 
 #Functions to check categories
+
 def is_fruit(text):
     
    return any(fruit in text for fruit in ["apple", "banana", "cherry"])
