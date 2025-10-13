@@ -10,7 +10,7 @@
 ## Domain 
 Information retrieval and data management for market trend prediction.
 
-#Course 
+## Course 
 INST326-0301 - Object-Oriented Programming for Information Science  
 
 ## Project Overview
