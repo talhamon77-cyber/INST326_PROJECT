@@ -3,7 +3,7 @@
 ## Team Members
 - Talha Muhammad - Product performance and insights functions
 - Alexandra Rodriguez - Text and data processing utilities including keyword extraction, CSV parsing, and URL validation
-- Anneliese Leo -
+- Anneliese Leo - formatting search results, generating data reports, and calculating relevance scores
 - Danieshia Maragh - Anonymized participant data, cleaned content, and generated returned report information
 - Ariana Saenz - Data validation, statistical summaries, and trend prediction
 
