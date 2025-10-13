@@ -7,7 +7,7 @@ A Python library to help businesses identify, analyze, and predict future trends
 - Talha Muhammad - Product performance and insights functions
 - Alexandra Rodriguez -
 - Anneliese Leo -
-- Danieshia Maragh -
+- Danieshia Maragh - Anonymized participant data, cleaned content, and generated returned report information
 - Ariana Saenz - Data validation, statistical summaries, and trend prediction
 
 ## Domain Focus
