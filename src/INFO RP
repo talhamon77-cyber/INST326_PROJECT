@@ -4,8 +4,7 @@ def validate_experiment_parameters(params):
     
     Args:
         params (dict): Dictionary containing experiment parameters 
-                       (e.g., {"sales": 1200, "satisfaction": 4.5, "price": 19.99})
-    
+
     Returns:
         bool: True if all parameters are valid.
     
@@ -30,8 +29,8 @@ def analyze_product_performance(sales, returns, satisfaction):
     """Analyze a product's performance using sales, return rate, and satisfaction score.
     
     Args:
-        sales (int | float): Total number of units sold.
-        returns (int | float): Number of returned products.
+        sales (int - float): Total number of units sold.
+        returns (int - float): Number of returned products.
         satisfaction (float): Average customer satisfaction score (1–5 scale).
     
     Returns:
