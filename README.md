@@ -23,7 +23,7 @@ A Python library to help businesses identify, analyze, and predict future trends
 - Specific pattern to these trends
 - Pricing and how it affects consumer rates
 - Possible trending topics
-- 
+
 ## Installation and Setup
 1. Clone this repository:
    ```bash
