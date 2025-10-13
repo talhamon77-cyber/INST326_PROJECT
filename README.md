@@ -8,7 +8,7 @@ A Python library to help businesses identify, analyze, and predict future trends
 - Alexandra Rodriguez -
 - Anneliese Leo -
 - Danieshia Maragh -
-- Ariana Saenz - Clean, summarize, and predict trends 
+- Ariana Saenz - Data validation, statistical summaries, and trend prediction
 
 ## Domain Focus
 Information retrieval and data management for market trend prediction.
