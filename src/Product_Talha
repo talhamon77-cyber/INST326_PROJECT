@@ -1,0 +1,74 @@
+from src import analyze_product_performance
+
+class Product:
+    """Represents a product and its performance metrics in the market.
+
+    This class encapsulates data about a single product—its sales,
+    returns, and customer satisfaction—and provides a method for
+    evaluating its overall performance using the Project 1 function
+    `analyze_product_performance()`.
+
+    Example:
+        >>> p = Product("Wireless Mouse", 500, 25, 4.2)
+        >>> print(p)
+        Wireless Mouse: 500 sold, 25 returns, 4.2/5 satisfaction
+        >>> p.evaluate_performance()
+        {'return_rate': 0.05, 'performance_score': 0.8, 'rating': 'Excellent'}
+    """
+
+    def __init__(self, name: str, sales: int, returns: int, satisfaction: float):
+        """Initialize a product with its key metrics.
+
+        Args:
+            name (str): Product name.
+            sales (int): Number of units sold (> 0).
+            returns (int): Number of units returned (≥ 0).
+            satisfaction (float): Average satisfaction score (0–5).
+
+        Raises:
+            ValueError: If parameters are missing or out of range.
+        """
+        if not name.strip():
+            raise ValueError("Product name cannot be empty.")
+        if sales <= 0 or returns < 0:
+            raise ValueError("Invalid sales or returns values.")
+        if not 0 <= satisfaction <= 5:
+            raise ValueError("Satisfaction must be between 0 and 5.")
+
+        # Private (encapsulated) attributes
+        self._name = name
+        self._sales = sales
+        self._returns = returns
+        self._satisfaction = satisfaction
+
+    @property
+    def name(self):
+        """str: The product name (read-only)."""
+        return self._name
+
+    @property
+    def satisfaction(self):
+        """float: Customer satisfaction rating."""
+        return self._satisfaction
+
+    @satisfaction.setter
+    def satisfaction(self, value: float):
+        if not 0 <= value <= 5:
+            raise ValueError("Satisfaction must be between 0 and 5.")
+        self._satisfaction = value
+
+    def evaluate_performance(self):
+        """Evaluate the product’s performance using Project 1 logic."""
+        return analyze_product_performance(self._sales, self._returns, self._satisfaction)
+
+    def update_sales(self, new_sales: int):
+        """Update the number of units sold."""
+        if new_sales <= 0:
+            raise ValueError("Sales must be greater than 0.")
+        self._sales = new_sales
+
+    def __str__(self):
+        return f"{self._name}: {self._sales} sold, {self._returns} returns, {self._satisfaction}/5 satisfaction"
+
+    def __repr__(self):
+        return f"Product(name='{self._name}', sales={self._sales}, returns={self._returns}, satisfaction={self._satisfaction})"
