@@ -2,8 +2,8 @@
 
 ## Team Members
 - Talha Muhammad - Product performance and insights functions
-- Alexandra Rodriguez -
-- Anneliese Leo -
+- Alexandra Rodriguez - Text and data processing utilities including keyword extraction, CSV parsing, and URL validation
+- Anneliese Leo - formatting search results, generating data reports, and calculating relevance scores
 - Danieshia Maragh - Anonymized participant data, cleaned content, and generated returned report information
 - Ariana Saenz - Data validation, statistical summaries, and trend prediction
 
@@ -31,6 +31,4 @@ A Python library to help businesses identify, analyze, and predict future trends
    ```
 
 2. No external dependencies required - uses Python standard library only
-
-## Quick Usage Examples
 

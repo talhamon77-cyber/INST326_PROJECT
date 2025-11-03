@@ -283,3 +283,124 @@ def extract_keywords(
     freq = Counter(words)
     sorted_words = [word for word, _ in freq.most_common(top_n)]
     return sorted_words
+
+
+
+from collections import defaultdict
+
+class SearchEngine:
+    def __init__(self, records):        # Initialize the search engine with a list of records (dictionaries).
+        if not isinstance(records, list):
+            raise ValueError("Records should be a list of dictionaries.")
+        self.records = records
+
+    def calculate_relevance_scores(self, query, fields_weights):       # Calculate relevance scores for records based on a query.
+        query_terms = query.lower().split()
+        scores = []
+
+        for record in self.records:
+            score = 0
+            for field, weight in fields_weights.items():
+                text = record.get(field, "").lower()
+                if not text:
+                    continue
+                field_terms = text.split()
+                term_freq = {term: field_terms.count(term) / len(field_terms) for term in set(field_terms)}
+                for qt in query_terms:
+                    score += term_freq.get(qt, 0) * weight
+            scores.append(score)
+        return scores
+
+    def format_search_results(self, results):        # Format a list of search result dictionaries into a readable string.
+
+        if not results or not isinstance(results, list):
+            return "No valid search results found."
+
+        formatted = []
+        for i, result in enumerate(results[:10], 1):       # Limit to top 10
+            title = result.get("title", "No Title")
+            snippet = result.get("snippet", "No description available.")
+            formatted.append(f"{i}. {title}\n   {snippet}\n")    
+        return "\n".join(formatted)
+
+
+import math
+def generate_data_report(records):
+    # Generates a simple data report from a list of dictionaries (records).
+    if not records:
+        return "No data available."
+
+    # Get all fields (columns) from the first record
+    fields = records[0].keys()
+    total_records = len(records)
+
+    # Separate fields into numeric and categorical based on first non-missing value
+    numeric_fields = set()
+    categorical_fields = set()
+    for field in fields:
+        for record in records:
+            value = record.get(field)
+            if value is not None:
+                if isinstance(value, (int, float)):
+                    numeric_fields.add(field)
+                else:
+                    categorical_fields.add(field)
+                break
+    missing_counts = defaultdict(int)    # Track missing values count per field
+
+    # Store values for numeric and categorical fields separately
+    numeric_values = defaultdict(list)
+    categorical_values = defaultdict(list)
+
+    # Collect values and count missing entries
+    for record in records:
+        for field in fields:
+            value = record.get(field)
+            if value is None:
+                missing_counts[field] += 1
+            else:
+                if field in numeric_fields:
+                    try:
+                        numeric_values[field].append(float(value))
+                    except (ValueError, TypeError):
+                        # Treat non-convertible values as missing
+                        missing_counts[field] += 1
+                else:
+                    categorical_values[field].append(str(value))
+
+    # Calculate summary statistics for numeric fields
+    numeric_summary = {}
+    for field, values in numeric_values.items():
+        count = len(values)
+        mean = sum(values) / count if count > 0 else 0
+        variance = sum((x - mean) ** 2 for x in values) / count if count > 0 else 0
+        std_dev = math.sqrt(variance)
+        numeric_summary[field] = {
+            "count": count,
+            "mean": round(mean, 2),
+            "std_dev": round(std_dev, 2),
+            "min": min(values) if values else None,
+            "max": max(values) if values else None,
+        }
+
+    # Summarize categorical fields
+    categorical_summary = {}
+    for field, values in categorical_values.items():
+        count = len(values)
+        unique_count = len(set(values))
+        most_common = Counter(values).most_common(3)
+        categorical_summary[field] = {
+            "count": count,
+            "unique": unique_count,
+            "top_values": most_common,
+        }
+
+    # Create final report dictionary
+    report = {
+        "total_records": total_records,
+        "missing_values": dict(missing_counts),
+        "numeric_fields_summary": numeric_summary,
+        "categorical_fields_summary": categorical_summary,
+    }
+    return report
+
