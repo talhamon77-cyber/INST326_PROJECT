@@ -1,6 +1,6 @@
 
 def validate_experiment_parameters(params):
-    """ Validate key experiment parameters for consumer trend analysis.
+    #validate key experiment parameters for consumer trend analysis.
     
     Args:
         params (dict): Dictionary containing experiment parameters 
@@ -12,7 +12,7 @@ def validate_experiment_parameters(params):
     Raises:
         ValueError: If parameters are missing or invalid.
         TypeError: If data types are incorrect.
-    """
+   
     required = ["sales", "satisfaction", "price"]
     
     for key in required:
@@ -27,7 +27,7 @@ def validate_experiment_parameters(params):
 
 
 def analyze_product_performance(sales, returns, satisfaction):
-    """ Analyze a product's performance using sales, return rate, and satisfaction score.
+     #Analyze a product's performance using sales, return rate, and satisfaction score.
     
     Args:
         sales (int | float): Total number of units sold.
@@ -40,7 +40,7 @@ def analyze_product_performance(sales, returns, satisfaction):
     Raises:
         ValueError: If inputs are invalid or out of range.
         TypeError: If input types are incorrect.
-    """
+    
     # Input validation
     if not all(isinstance(x, (int, float)) for x in [sales, returns, satisfaction]):
         raise TypeError("All inputs must be numeric.")
@@ -72,7 +72,7 @@ def analyze_product_performance(sales, returns, satisfaction):
 
 
 def generate_market_insights_report(products):
-    """Generate a market insights report summarizing product performance.
+#Generate a market insights report summarizing product performance.
     
     Args:
         products (list[dict]): List of product data dictionaries with keys 
@@ -86,7 +86,7 @@ def generate_market_insights_report(products):
     
     Raises:
         ValueError: If list is empty or data incomplete.
-    """
+ 
     if not products:
         raise ValueError("Product list cannot be empty.")
     
@@ -232,15 +232,13 @@ class ParticipantData:
         return [f"Participant_{i+1}" for i in range(len(self.participants))]
 
 class ValidationError(ValueError):
-    """Raised when input validation fails."""
 
 
 class DataParseError(ValueError):
-    """Raised when data parsing fails."""
 
 
 def validate_url_format(url: str, allowed_schemes: Iterable[str] = ("http", "https")) -> bool:
-    """Simple: Validate URL format."""
+    #Simple: Validate URL format.
     if not isinstance(url, str):
         raise TypeError("url must be a string")
     parsed = urlparse(url.strip())
@@ -250,7 +248,7 @@ def validate_url_format(url: str, allowed_schemes: Iterable[str] = ("http", "htt
 
 
 def parse_csv_data(csv_text: str, *, has_header: bool = True) -> Union[List[Dict[str, str]], List[List[str]]]:
-    """Medium: Parse CSV text into structured rows with optional header validation."""
+    #Medium: Parse CSV text into structured rows with optional header validation.
     if not isinstance(csv_text, str):
         raise TypeError("csv_text must be a string")
     reader = csv.reader(StringIO(csv_text))
@@ -269,7 +267,7 @@ def extract_keywords(
     stopwords: Optional[Iterable[str]] = None,
     top_n: Optional[int] = None
 ) -> List[str]:
-    """Complex: Extract frequent keywords from text with filtering and ranking."""
+    #Complex: Extract frequent keywords from text with filtering and ranking.
     if not isinstance(text, str):
         raise TypeError("text must be a string")
     if min_length < 1:
@@ -398,3 +396,63 @@ def generate_data_report(records):
     }
     return report
 
+def anonymize_participant_data(participants: list[dict]) -> list[dict]:
+
+    anonymized = []
+    for idx, participant in enumerate(participants, start=1):
+        new_participant = participant.copy()  # Copy to avoid modifying original
+        new_participant['name'] = f"participant_{idx}"
+        anonymized.append(new_participant)
+    return anonymized
+
+# Example usage
+data = [
+    {"name": "Alice", "age": 25, "email": "alice@example.com"},
+    {"name": "Bob", "age": 30, "email": "bob@example.com"}
+]
+
+anonymized_data = anonymize_participant_data(data)
+print(anonymized_data)
+
+
+import re
+
+def clean_text_content(text: str) -> str:
+
+
+    # Convert to lowercase
+    text = text.lower()
+    # Remove special characters (keep letters, numbers, and spaces)
+    text = re.sub(r'[^a-z0-9\s]', '', text)
+    # Collapse multiple spaces into one
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+# Example usage
+raw_text = "  Hello, World! This is   an Example...  "
+cleaned = clean_text_content(raw_text)
+print(cleaned)  # Output: "hello world this is an example"
+
+
+from collections import Counter
+
+def generate_data_report(data: list[dict]) -> dict:
+
+    total_members = len(data)
+    all_items = [item for member in data for item in member.get('purchases', [])]
+    items_summary = dict(Counter(all_items))
+    
+    return {
+        'total_members': total_members,
+        'items_summary': items_summary
+    }
+
+# Example usage
+members = [
+    {"name": "Alice", "purchases": ["apple", "banana"]},
+    {"name": "Bob", "purchases": ["banana", "orange"]},
+    {"name": "Charlie", "purchases": ["apple"]}
+]
+
+report = generate_data_report(members)
+print(report)
