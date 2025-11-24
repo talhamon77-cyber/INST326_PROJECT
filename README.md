@@ -32,3 +32,52 @@ A Python library to help businesses identify, analyze, and predict future trends
 
 2. No external dependencies required - uses Python standard library only
 
+## System Architecture 
+
+### Inheritence Hierarchies
+
+##### Participant Hierarchy
+```
+ParticipantAnonymizer (Abstract Base Class)
+├── StudentParticipant
+├── ChildParticipant 
+└── ElderParticipant 
+```
+
+#### TextClean Hierarchy
+```
+Textclean (Abstract Base Class)
+├── Characters 
+├── Punctuation 
+└── Stripped 
+```
+### Composition Relationships
+
+- **Cleaning** contains:
+  - Collection of letters (has-many)
+  - Removal of white/extra spaces (has-many)
+  - Lowercase letters (has-many)
+
+  - **Limit** contains:
+  - Child participant age (has-a)
+  - Senior participant age (has-a)
+  - Student participant age (has-a)
+
+  ## Key Features
+
+### 1. Polymorphic Behavior
+Same method calls produce different results based on object type:
+- `calculate_student()` - 
+- `calculate_child()` -
+- `calculate_elder()` ` -
+- `get_age_requirement()` - 
+
+### 2. Abstract Base Classes
+Enforce consistent interfaces across implementations:
+- **ParticipantAnonymizer** - Requires age, person, and email methods
+- **TextClean** - Requires punctuation, lowercase, and stripping methods
+
+### 3. Composition Over Inheritance
+- Cleaning coordinates multiple object types
+- Limit links participants and age without inheritance
+- Flexible "has-a" relationships enable system scalability
