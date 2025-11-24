@@ -41,3 +41,37 @@ if __name__ == "__main__":
 
     # Error in this one:
     print(student_cleaner.clean("notstudent@gmail.com"))
+
+
+# Polymorphic example
+
+class SimpleSalesAnalysis(AbstractAnalysis):
+
+    def __init__(self, sales_data: List[float]):
+        self.sales_data = sales_data
+
+    def validate(self) -> bool:
+        if not self.sales_data:
+            raise ValueError("Sales data cannot be empty.")
+        return True
+
+    def summarize(self) -> dict:
+        return {"sales_mean": statistics.mean(self.sales_data)}
+
+    def predict(self) -> dict:
+        # Simple linear trend
+        x = np.arange(len(self.sales_data))
+        y = np.array(self.sales_data)
+        coef = np.polyfit(x, y, 1)
+        trend_line = np.polyval(coef, x)
+        return {"slope": coef[0], "intercept": coef[1], "trend_line": trend_line.tolist()}
+
+# Demonstration
+analyses = [
+    ConsumerTrendAnalysis([100,120,150], [4.0,4.1,4.3], [19.99,20.49,20.99]),
+    SimpleSalesAnalysis([100,120,150])
+]
+
+for a in analyses:
+    a.validate()
+    print(a.summarize())
