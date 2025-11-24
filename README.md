@@ -52,7 +52,7 @@ Textclean (Abstract Base Class)
 └── Stripped 
 ```
 ### Composition Relationships
-
+```
 - **Cleaning** contains:
   - Collection of letters (has-many)
   - Removal of white/extra spaces (has-many)
@@ -62,15 +62,15 @@ Textclean (Abstract Base Class)
   - Child participant age (has-a)
   - Senior participant age (has-a)
   - Student participant age (has-a)
-
+```
   ## Key Features
 
 ### 1. Polymorphic Behavior
 Same method calls produce different results based on object type:
-- `calculate_student()` - 
-- `calculate_child()` -
-- `calculate_elder()` ` -
-- `get_age_requirement()` - 
+- `calculate_student()` - need to have a student email
+- `calculate_child()` - must have parents with them
+- `calculate_elder()`  - has to show id
+- `get_age_requirement()` - different requirements based on age (except for students)
 
 ### 2. Abstract Base Classes
 Enforce consistent interfaces across implementations:
