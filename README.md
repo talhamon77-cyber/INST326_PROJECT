@@ -95,6 +95,8 @@ participants = [
 for p in participants:
     print(p.get_info())
 
-print("\nAnonymized data:")
-print(anonymize_participant_data(participants))
+#Age calculation
+print(StudentParticipant.calculate_age()) # 20
+print(AdultParticipant.calculate_age())  # 35
+print(Seniorparticipant.calculate_age()) # 70
 ```
