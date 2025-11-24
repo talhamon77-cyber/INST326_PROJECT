@@ -81,3 +81,20 @@ Enforce consistent interfaces across implementations:
 - Cleaning coordinates multiple object types
 - Limit links participants and age without inheritance
 - Flexible "has-a" relationships enable system scalability
+
+### Usage Examples
+
+## Creating Participant Anonymizer
+```
+participants = [
+    StudentParticipant("Danieshia", 20, "dmaragh1@terpmail.umd.edu", "University of Maryland"),
+    AdultParticipant("Ash", 35, "ashley123@email.com", "Teacher"),
+    SeniorParticipant("Katie", 70, "katie@email.com", True)
+]
+
+for p in participants:
+    print(p.get_info())
+
+print("\nAnonymized data:")
+print(anonymize_participant_data(participants))
+```
