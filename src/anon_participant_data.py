@@ -147,27 +147,3 @@ class ConsumerTrendAnalysis(AbstractAnalysis):
         return {"slope": coef[0], "intercept": coef[1], "trend_line": trend_line.tolist()}
 
 
-# Polymorphic example
-
-class SimpleSalesAnalysis(AbstractAnalysis):
-
-    def __init__(self, sales_data: List[float]):
-        self.sales_data = sales_data
-
-    def validate(self) -> bool:
-        if not self.sales_data:
-            raise ValueError("Sales data cannot be empty.")
-        return True
-
-    def summarize(self) -> dict:
-        return {"sales_mean": statistics.mean(self.sales_data)}
-
-    def predict(self) -> dict:
-        # Simple linear trend
-        x = np.arange(len(self.sales_data))
-        y = np.array(self.sales_data)
-        coef = np.polyfit(x, y, 1)
-        trend_line = np.polyval(coef, x)
-        return {"slope": coef[0], "intercept": coef[1], "trend_line": trend_line.tolist()}
-
-
