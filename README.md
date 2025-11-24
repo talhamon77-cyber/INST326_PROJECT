@@ -95,7 +95,7 @@ participants = [
 for p in participants:
     print(p.get_info())
 
-#Age calculation
+#Polymorphic age calculation
 print(StudentParticipant.calculate_age()) # 20
 print(AdultParticipant.calculate_age())  # 35
 print(Seniorparticipant.calculate_age()) # 70
