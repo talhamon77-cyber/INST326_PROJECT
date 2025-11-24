@@ -32,7 +32,7 @@ A Python library to help businesses identify, analyze, and predict future trends
 
 2. No external dependencies required - uses Python standard library only
 
-## System Architecture 
+## System Architecture - Danieshia Maragh
 
 ### Inheritence Hierarchies
 
