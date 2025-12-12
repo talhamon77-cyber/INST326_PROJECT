@@ -396,3 +396,86 @@ def generate_data_report(records):
         "categorical_fields_summary": categorical_summary,
     }
     return report
+
+
+# Query class
+from datetime import datetime
+from collections import Counter
+import re
+
+
+class Query:
+    def __init__(self, query_id, text):
+        if not query_id or not query_id.strip():
+            raise ValueError("Query ID cannot be empty.")
+        if not text or not text.strip():
+            raise ValueError("Query text cannot be empty.")
+        self._query_id = query_id.strip()
+        self._text = text.strip()
+        self._timestamp = datetime.now()
+        self._keywords = self._parse_keywords(self._text)
+        self._results = []
+
+    @property
+    def query_id(self):
+        return self._query_id  # fixed: previously returned self._text by mistake
+
+    @property
+    def text(self):
+        return self._text
+
+    @text.setter
+    def text(self, new_text):
+        if not new_text or not new_text.strip():
+            raise ValueError("Query text cannot be empty.")
+        self._text = new_text.strip()
+        self._keywords = self._parse_keywords(new_text)
+
+    @property
+    def results(self):
+        return list(self._results)
+
+    def _parse_keywords(self, query_text):
+        # more robust: splits on any non-alphanumeric and filters blanks
+        return [word.lower() for word in re.split(r'\W+', query_text) if word]
+
+    def execute(self, search_engine):
+        if not hasattr(search_engine, "calculate_relevance_scores"):
+            raise TypeError("Expected a SearchEngine instance with calculate_relevance_scores method.")
+        if not getattr(search_engine, "records", None):
+            raise ValueError("No records available for searching.")
+
+        fields_weights = {"title": 0.7, "snippet": 0.3}
+        scores = search_engine.calculate_relevance_scores(self._text, fields_weights)
+
+        results = []
+        for record, score in zip(search_engine.records, scores):
+            record_copy = record.copy()
+            record_copy["relevance_score"] = round(score, 3)
+            results.append(record_copy)
+
+        results.sort(key=lambda x: x["relevance_score"], reverse=True)
+        self._results = results
+        return results
+
+    def summarize_results(self, top_n=5):
+        if not self._results:
+            return f"No results found for query '{self._text}'."
+        summary_lines = [f"Top {min(top_n, len(self._results))} results for '{self._text}':"]
+        for i, res in enumerate(self._results[:top_n], 1):
+            title = res.get("title", "Untitled")
+            snippet = res.get("snippet", "")[:100]
+            score = res.get("relevance_score", 0)
+            summary_lines.append(f"{i}. {title} (score: {score})\n   {snippet}...")
+        return "\n".join(summary_lines)
+
+    def keyword_frequency(self):
+        return dict(Counter(self._keywords))
+
+    def __str__(self):
+        return f"Query[{self._query_id}] '{self._text}' ({len(self._results)} results)"
+
+    def __repr__(self):
+        return (f"Query(query_id={self._query_id!r}, text={self._text!r}, "
+                f"timestamp={self._timestamp!r}, keywords={self._keywords!r}, "
+                f"results={len(self._results)} results)")
