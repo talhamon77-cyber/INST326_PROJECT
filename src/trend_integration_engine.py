@@ -1,8 +1,8 @@
 from typing import List, Dict
 
-from analyses.abstract_analysis import AbstractAnalysis
-from src.product import Product
-from src.market_report import MarketReport
+from abstract_analysis import AbstractAnalysis
+from product import Product
+from market_report import MarketReport
 
 
 class TrendIntegrationEngine:
