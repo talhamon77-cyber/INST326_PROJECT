@@ -15,7 +15,7 @@ class TrendIntegrationEngine:
     - Attach trend scores to Product objects
     - Generate integrated market reports
 
-    This class represents the Trend App Integration Lead role.
+
     """
 
     def __init__(self, analyses: List[AbstractAnalysis]):
