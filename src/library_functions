@@ -1,0 +1,458 @@
+
+def validate_experiment_parameters(params):
+    #validate key experiment parameters for consumer trend analysis.
+    
+    Args:
+        params (dict): Dictionary containing experiment parameters 
+                       (e.g., {"sales": 1200, "satisfaction": 4.5, "price": 19.99})
+    
+    Returns:
+        bool: True if all parameters are valid.
+    
+    Raises:
+        ValueError: If parameters are missing or invalid.
+        TypeError: If data types are incorrect.
+   
+    required = ["sales", "satisfaction", "price"]
+    
+    for key in required:
+        if key not in params:
+            raise ValueError(f"Missing parameter: {key}")
+        if not isinstance(params[key], (int, float)):
+            raise TypeError(f"{key} must be numeric")
+        if params[key] < 0:
+            raise ValueError(f"{key} cannot be negative")
+    
+    return True
+
+
+def analyze_product_performance(sales, returns, satisfaction):
+     #Analyze a product's performance using sales, return rate, and satisfaction score.
+    
+    Args:
+        sales (int | float): Total number of units sold.
+        returns (int | float): Number of returned products.
+        satisfaction (float): Average customer satisfaction score (1–5 scale).
+    
+    Returns:
+        dict: Performance summary containing return rate, performance score, and rating.
+    
+    Raises:
+        ValueError: If inputs are invalid or out of range.
+        TypeError: If input types are incorrect.
+    
+    # Input validation
+    if not all(isinstance(x, (int, float)) for x in [sales, returns, satisfaction]):
+        raise TypeError("All inputs must be numeric.")
+    if sales <= 0 or returns < 0:
+        raise ValueError("Sales must be > 0 and returns cannot be negative.")
+    if not 0 <= satisfaction <= 5:
+        raise ValueError("Satisfaction must be between 0 and 5.")
+    
+    # Compute key metrics
+    return_rate = returns / sales
+    performance_score = (satisfaction / 5) * (1 - return_rate)
+    
+    # Categorize performance
+    if performance_score >= 0.8:
+        rating = "Excellent"
+    elif performance_score >= 0.6:
+        rating = "Good"
+    elif performance_score >= 0.4:
+        rating = "Average"
+    else:
+        rating = "Poor"
+    
+    return {
+        "return_rate": round(return_rate, 3),
+        "performance_score": round(performance_score, 2),
+        "rating": rating
+    }
+
+
+
+def generate_market_insights_report(products):
+#Generate a market insights report summarizing product performance.
+    
+    Args:
+        products (list[dict]): List of product data dictionaries with keys 
+            'name', 'sales', 'returns', and 'satisfaction'.
+    Returns:
+        dict: Report containing:
+            - ranked_products: List of products sorted by performance score.
+            - average_satisfaction: Average satisfaction across all products.
+            - overall_return_rate: Average return rate.
+            - top_product: Name of best-performing product.
+    
+    Raises:
+        ValueError: If list is empty or data incomplete.
+ 
+    if not products:
+        raise ValueError("Product list cannot be empty.")
+    
+    ranked_products = []
+    total_satisfaction = 0
+    total_returns = 0
+    total_sales = 0
+    
+    for p in products:
+        required = ["name", "sales", "returns", "satisfaction"]
+        if not all(k in p for k in required):
+            raise ValueError(f"Missing data for product: {p}")
+        
+        sales, returns, satisfaction = p["sales"], p["returns"], p["satisfaction"]
+        if not all(isinstance(x, (int, float)) for x in [sales, returns, satisfaction]):
+            raise TypeError(f"Invalid data types in product: {p['name']}")
+        
+        return_rate = returns / sales if sales > 0 else 0
+        performance_score = (satisfaction / 5) * (1 - return_rate)
+        
+        ranked_products.append({
+            "name": p["name"],
+            "performance_score": round(performance_score, 2),
+            "return_rate": round(return_rate, 3),
+            "satisfaction": satisfaction
+        })
+        
+        total_satisfaction += satisfaction
+        total_returns += returns
+        total_sales += sales
+    
+    ranked_products.sort(key=lambda x: x["performance_score"], reverse=True)
+    
+    average_satisfaction = total_satisfaction / len(products)
+    overall_return_rate = total_returns / total_sales if total_sales > 0 else 0
+    top_product = ranked_products[0]["name"]
+    
+    return {
+        "ranked_products": ranked_products,
+        "average_satisfaction": round(average_satisfaction, 2),
+        "overall_return_rate": round(overall_return_rate, 3),
+        "top_product": top_product
+    }
+
+
+def parse_search_query(query):
+    return [word.lower() for word in query.split() if word.isalnum()]
+
+
+import statistics
+
+def calculate_statistical_summary(data):
+    return {
+        "mean": statistics.mean(data), 
+        "median": statistics.median(data), 
+        "stdev": statistics.stdev(data)
+    }
+
+
+import numpy as np
+
+def predict_trend(data):
+    x = np.arange(len(data))
+    y = np.array(data)
+    coefficients = np.polyfit(x, y, 1)
+    trend_line = np.polyval(coefficients, x)
+    return {"slope": coefficients[0], "intercept": coefficients[1], "trend_line": trend_line.tolist()}
+
+class ReturnReport:
+    def __init__(self): #defining the function for sales and returns
+        self.sales = {}
+        self.returns = {}
+
+    def add_sales(self, product_id, quantity): #adding a quantity (+1) to a product if the product id isn't in sales
+        if product_id not in self.sales:
+            self.sales[product_id] = 0
+        self.sales[product_id] += quantity
+
+    def add_return(self, product_id, quantity): #adding a quantity (+1) to returns if the product id isnt it self returns
+        if product_id not in self.returns:
+            self.returns[product_id] = 0
+        self.returns[product_id] += quantity
+
+    def _calc_return_rate(self, sold, returned): #calculating the return rate 
+        if sold > 0:
+            return round((returned / sold) * 100, 2)
+        else:
+            return 0
+    def generate_report(self): #using formulas to generate the totals for both sales and returns 
+        report = {}
+        total_sold = sum(self.sales.values())
+        total_returned = sum(self.returns.get(product_id, 0) for product_id in self.sales)
+
+        #per product report
+
+        for product_id, sold in self.sales.items():
+            returned = self.returns.get(product_id, 0)
+            report[product_id] = {
+                "Sold": sold,
+                "Returned": returned,
+                "Return Rate (%)": self._calc_return_rate(sold, returned)
+            }
+
+        # overall summary
+        report["Overall"] = {
+            "Total Sold": total_sold,
+            "Total Returned": total_returned,
+            "Overall Return Rate (%)": self._calc_return_rate(total_sold, total_returned)
+        }
+
+        return report
+
+
+class TextOrganizer: # class to organize categories
+    def __init__(self):
+        self.categories = {}
+
+    def clean_text_content(self, data_list, category_allowed): #cleaning the cateogories
+
+        self.categories = {category: [] for category in category_allowed}
+
+        for item in data_list: #for every item in the data list
+            cleaned_item = item.strip().lower() #strip the item of any whitespaces and make it lowercase
+            categorized = False
+            for category, allowed in category_allowed.items(): #for every category in the allowed category
+                if allowed(cleaned_item):
+                    self.categories[category].append(cleaned_item) #add it to the cleaned item list
+                    categorized = True
+                    break
+            if not categorized: #if its not categorized 
+                self.categories.setdefault("uncategorized", []).append(cleaned_item) #set it to uncategorized and add it to the end of the clean list
+        return self.categories
+
+class ParticipantData:
+    def __init__(self):
+        self.participants = []
+
+    def add_participant(self, name):
+        self.participants.append(name)
+
+    def anonymize_participant_data(self):
+        # Simple formatting-based anonymization: replace names with numbered labels
+        return [f"Participant_{i+1}" for i in range(len(self.participants))]
+
+class ValidationError(ValueError):
+
+
+class DataParseError(ValueError):
+
+
+def validate_url_format(url: str, allowed_schemes: Iterable[str] = ("http", "https")) -> bool:
+    #Simple: Validate URL format.
+    if not isinstance(url, str):
+        raise TypeError("url must be a string")
+    parsed = urlparse(url.strip())
+    if parsed.scheme not in allowed_schemes or not parsed.netloc:
+        return False
+    return True
+
+
+def parse_csv_data(csv_text: str, *, has_header: bool = True) -> Union[List[Dict[str, str]], List[List[str]]]:
+    #Medium: Parse CSV text into structured rows with optional header validation.
+    if not isinstance(csv_text, str):
+        raise TypeError("csv_text must be a string")
+    reader = csv.reader(StringIO(csv_text))
+    rows = [r for r in reader]
+    if not has_header:
+        return rows
+    header = rows[0]
+    data = [dict(zip(header, row)) for row in rows[1:]]
+    return data
+
+
+def extract_keywords(
+    text: str,
+    *,
+    min_length: int = 3,
+    stopwords: Optional[Iterable[str]] = None,
+    top_n: Optional[int] = None
+) -> List[str]:
+    #Complex: Extract frequent keywords from text with filtering and ranking.
+    if not isinstance(text, str):
+        raise TypeError("text must be a string")
+    if min_length < 1:
+        raise ValueError("min_length must be at least 1")
+
+    text = text.lower()
+    tokens = re.findall(r"[a-z]+", text)
+    stopwords = set(stopwords or [])
+    words = [t for t in tokens if len(t) >= min_length and t not in stopwords]
+
+    freq = Counter(words)
+    sorted_words = [word for word, _ in freq.most_common(top_n)]
+    return sorted_words
+
+
+
+f format_search_results(results):
+    if not results or not isinstance(results, list):
+        return "No valid search results found."
+
+    formatted = []
+    for i, result in enumerate(results[:10], 1):  # Limit to top 10
+        title = result.get("title", "No Title")
+        snippet = result.get("snippet", "No description available.")
+        formatted.append(f"{i}. {title}\n   {snippet}\n")    
+    return "\n".join(formatted)
+
+
+def calculate_relevance_scores(query, records, fields_weights):
+    # Calculate relevance scores for records based on a query.
+    # Returns: list of relevance scores corresponding to each record
+    query_terms = query.lower().split()
+    scores = []
+
+    for record in records:
+        score = 0
+        for field, weight in fields_weights.items():
+            text = record.get(field, "").lower()
+            if not text:
+                continue
+            field_terms = text.split()
+            term_freq = {term: field_terms.count(term) / len(field_terms) for term in set(field_terms)}
+            for qt in query_terms:
+                score += term_freq.get(qt, 0) * weight
+        scores.append(score)
+    return scores
+
+
+import math
+def generate_data_report(records):
+    # Generates a simple data report from a list of dictionaries (records).
+    if not records:
+        return "No data available."
+
+    # Get all fields (columns) from the first record
+    fields = records[0].keys()
+    total_records = len(records)
+
+    # Separate fields into numeric and categorical based on first non-missing value
+    numeric_fields = set()
+    categorical_fields = set()
+    for field in fields:
+        for record in records:
+            value = record.get(field)
+            if value is not None:
+                if isinstance(value, (int, float)):
+                    numeric_fields.add(field)
+                else:
+                    categorical_fields.add(field)
+                break
+    missing_counts = defaultdict(int)    # Track missing values count per field
+
+    # Store values for numeric and categorical fields separately
+    numeric_values = defaultdict(list)
+    categorical_values = defaultdict(list)
+
+    # Collect values and count missing entries
+    for record in records:
+        for field in fields:
+            value = record.get(field)
+            if value is None:
+                missing_counts[field] += 1
+            else:
+                if field in numeric_fields:
+                    try:
+                        numeric_values[field].append(float(value))
+                    except (ValueError, TypeError):
+                        # Treat non-convertible values as missing
+                        missing_counts[field] += 1
+                else:
+                    categorical_values[field].append(str(value))
+
+    # Calculate summary statistics for numeric fields
+    numeric_summary = {}
+    for field, values in numeric_values.items():
+        count = len(values)
+        mean = sum(values) / count if count > 0 else 0
+        variance = sum((x - mean) ** 2 for x in values) / count if count > 0 else 0
+        std_dev = math.sqrt(variance)
+        numeric_summary[field] = {
+            "count": count,
+            "mean": round(mean, 2),
+            "std_dev": round(std_dev, 2),
+            "min": min(values) if values else None,
+            "max": max(values) if values else None,
+        }
+
+    # Summarize categorical fields
+    categorical_summary = {}
+    for field, values in categorical_values.items():
+        count = len(values)
+        unique_count = len(set(values))
+        most_common = Counter(values).most_common(3)
+        categorical_summary[field] = {
+            "count": count,
+            "unique": unique_count,
+            "top_values": most_common,
+        }
+
+    # Create final report dictionary
+    report = {
+        "total_records": total_records,
+        "missing_values": dict(missing_counts),
+        "numeric_fields_summary": numeric_summary,
+        "categorical_fields_summary": categorical_summary,
+    }
+    return report
+
+def anonymize_participant_data(participants: list[dict]) -> list[dict]:
+
+    anonymized = []
+    for idx, participant in enumerate(participants, start=1):
+        new_participant = participant.copy()  # Copy to avoid modifying original
+        new_participant['name'] = f"participant_{idx}"
+        anonymized.append(new_participant)
+    return anonymized
+
+# Example usage
+data = [
+    {"name": "Alice", "age": 25, "email": "alice@example.com"},
+    {"name": "Bob", "age": 30, "email": "bob@example.com"}
+]
+
+anonymized_data = anonymize_participant_data(data)
+print(anonymized_data)
+
+
+import re
+
+def clean_text_content(text: str) -> str:
+
+
+    # Convert to lowercase
+    text = text.lower()
+    # Remove special characters (keep letters, numbers, and spaces)
+    text = re.sub(r'[^a-z0-9\s]', '', text)
+    # Collapse multiple spaces into one
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+# Example usage
+raw_text = "  Hello, World! This is   an Example...  "
+cleaned = clean_text_content(raw_text)
+print(cleaned)  # Output: "hello world this is an example"
+
+
+from collections import Counter
+
+def generate_data_report(data: list[dict]) -> dict:
+
+    total_members = len(data)
+    all_items = [item for member in data for item in member.get('purchases', [])]
+    items_summary = dict(Counter(all_items))
+    
+    return {
+        'total_members': total_members,
+        'items_summary': items_summary
+    }
+
+# Example usage
+members = [
+    {"name": "Alice", "purchases": ["apple", "banana"]},
+    {"name": "Bob", "purchases": ["banana", "orange"]},
+    {"name": "Charlie", "purchases": ["apple"]}
+]
+
+report = generate_data_report(members)
+print(report)
