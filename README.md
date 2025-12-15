@@ -42,40 +42,33 @@ reports to support decision-making and trend prediction.
 
 ---
 
-Running the Application:
+## Running the Application:
 
 python demo.py
 
 
 The application will:
 
-Load saved products (if they exist)
+- Load saved products (if they exist)
+- Add sample products if none are found
+- Generate a market report
+- Export the report
+- Save system state
 
-Add sample products if none are found
-
-Generate a market report
-
-Export the report
-
-Save system state
-
-
-
+---
 All tests must pass before submission.
 
-Video Presentation
+## Video Presentation
 
 📽️ Video link:
-
-AI Collaboration
+---
+## AI Collaboration
 
 AI tools were used to assist with:
 
-Code scaffolding
-
-Debugging
-
-Documentation structure
+- Code scaffolding
+- Debugging
+- Documentation structure
 
 All AI-generated content was reviewed, modified, and validated by the team.
 Final responsibility for correctness and design decisions rests with the team.
