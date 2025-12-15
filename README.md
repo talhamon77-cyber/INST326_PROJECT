@@ -1,161 +1,85 @@
-# Consumer Trend Analysis Library
+# Consumer Market Trend Analysis System
+
+## Project Overview
+This project is a complete Information Science application designed to help businesses
+analyze consumer and product data in order to identify patterns and predict future market trends.
+The system integrates object-oriented design, data persistence, testing, and reporting
+into a cohesive, end-to-end solution.
+
+The application supports physical and digital products, calculates trend scores using
+polymorphic behavior, generates market reports, and persists data between sessions.
+
+This project serves as the capstone for INST326 and demonstrates professional software
+development practices.
+
+---
 
 ## Team Members
-- Talha Muhammad - Product performance and insights functions
+ Talha Muhammad - Product performance and insights functions
 - Alexandra Rodriguez - Text and data processing utilities including keyword extraction, CSV parsing, and URL validation
 - Anneliese Leo - formatting search results, generating data reports, and calculating relevance scores
 - Danieshia Maragh - Anonymized participant data, cleaned content, and generated returned report information
 - Ariana Saenz - Data validation, statistical summaries, and trend prediction
 
-## Domain 
-Information retrieval and data management for market trend prediction.
+---
 
-## Course 
-INST326-0301 - Object-Oriented Programming for Information Science  
+## Domain Problem
+Businesses often collect large amounts of sales and customer engagement data but lack
+tools to transform that data into actionable insights.  
+This system retrieves product data, analyzes performance metrics, and produces ranked
+reports to support decision-making and trend prediction.
 
-## Project Overview
-A Python library to help businesses identify, analyze, and predict future trends in the consumer market based on sales and customer engagement data.
+---
 
-## Problem Statement
-- Seeing what was trending in prior years
-- Why are certain products more popular than others
-- If certain products are more popular at specific times (seasonal)
-- Specific pattern to these trends
-- Pricing and how it affects consumer rates
-- Possible trending topics
+## Key Features
+- Object-oriented product hierarchy with inheritance and polymorphism
+- Trend score analysis for physical and digital products
+- Data persistence using JSON
+- Import products from JSON or CSV
+- Export market reports to JSON
+- Unit, integration, and system testing
+- Modular, maintainable architecture
 
-## Installation and Setup
-1. Clone this repository:
-   ```bash
-   https://github.com/talhamon77-cyber/INST326_PROJECT.git
-   ```
+---
 
-2. No external dependencies required - uses Python standard library only
+Running the Application
 
-## System Architecture - Danieshia Maragh
+From the repository root:
 
-### Inheritence Hierarchies
+python trend_app.py
 
-##### Participant Hierarchy
-```
-ParticipantAnonymizer (Abstract Base Class)
-├── StudentParticipant
-├── ChildParticipant 
-└── ElderParticipant 
-```
 
-#### TextClean Hierarchy
-```
-Textclean (Abstract Base Class)
-├── Characters 
-├── Punctuation 
-└── Stripped 
-```
-### Composition Relationships
-```
-- **Cleaning** contains:
-  - Collection of letters (has-many)
-  - Removal of white/extra spaces (has-many)
-  - Lowercase letters (has-many)
+The application will:
 
-  - **Limit** contains:
-  - Child participant age (has-a)
-  - Senior participant age (has-a)
-  - Student participant age (has-a)
-```
-  ## Key Features
+Load saved products (if they exist)
 
-### 1. Polymorphic Behavior
-Same method calls produce different results based on object type:
-- `calculate_student()` - need to have a student email
-- `calculate_child()` - must have parents with them
-- `calculate_elder()`  - has to show id
-- `get_age_requirement()` - different requirements based on age (except for students)
+Add sample products if none are found
 
-### 2. Abstract Base Classes
-Enforce consistent interfaces across implementations:
-- **ParticipantAnonymizer** - Requires age, person, and email methods
-- **TextClean** - Requires punctuation, lowercase, and stripping methods
+Generate a market report
 
-### 3. Composition Over Inheritance
-- Cleaning coordinates multiple object types
-- Limit links participants and age without inheritance
-- Flexible "has-a" relationships enable system scalability
+Export the report
 
-### Usage Examples
+Save system state
 
-## Creating Participant Anonymizer
-```
-participants = [
-    StudentParticipant("Danieshia", 20, "dmaragh1@terpmail.umd.edu", "University of Maryland"),
-    AdultParticipant("Ash", 35, "ashley123@email.com", "Teacher"),
-    SeniorParticipant("Katie", 70, "katie@email.com", True)
-]
+Running Tests
+python -m unittest discover
 
-for p in participants:
-    print(p.get_info())
 
-#Polymorphic age calculation
-print(StudentParticipant.calculate_age()) # 20
-print(AdultParticipant.calculate_age())  # 35
-print(Seniorparticipant.calculate_age()) # 70
-```
-## Text Cleaner 
-```
-from abc import ABC, abstractmethod
-from textcleaner import TextCleaner, LowercaseNormalizer, UppercaseNormalizer
+All tests must pass before submission.
 
-# Create different cleaning behaviors
-lower_cleaner = TextCleaner(LowercaseNormalizer())
-upper_cleaner = TextCleaner(UppercaseNormalizer())
+Video Presentation
 
-# Polymorphic cleaning
-print(lower_cleaner.clean("   HeLLo World   "))  # "hello world"
-print(upper_cleaner.clean("   HeLLo World   "))  # "HELLO WORLD"
-```
-## Working Text cleaner and Participant Anonymizer Demo
-```
-class Normalizer:
-    def normalize(self, text: str) -> str:
-        raise NotImplementedError("Subclasses must implement normalize()")
+📽️ Video link:
 
-class LowercaseNormalizer(Normalizer):
-    def normalize(self, text: str) -> str:
-        return text.lower()
+AI Collaboration
 
-class UppercaseNormalizer(Normalizer):
-    def normalize(self, text: str) -> str:
-        return text.upper()
+AI tools were used to assist with:
 
-class StudentEmailNormalizer(Normalizer):
-    def normalize(self, email: str) -> str:
-        email = email.strip().lower()
-        if not email.endswith("terpmail.@umd.edu"):
-            raise ValueError("Not a valid student email")
-        return email
+Code scaffolding
 
-class TextCleaner:
-    def __init__(self, normalizer: Normalizer):
-        self.normalizer = normalizer   # uses a Normalizer object
+Debugging
 
-    def clean(self, text: str) -> str:
-        text = text.strip()
-        return self.normalizer.normalize(text)
+Documentation structure
 
-if __name__ == "__main__":
-    # Create cleaner behaviors
-    lower_cleaner = TextCleaner(LowercaseNormalizer())
-    upper_cleaner = TextCleaner(UppercaseNormalizer())
-    student_cleaner = TextCleaner(StudentEmailNormalizer())
-
-    # Polymorphic cleaning
-    print(lower_cleaner.clean("   HeLLo THERE   "))      # "hello there"
-    print(upper_cleaner.clean("   HeLLo THERE   "))      # "HELLO THERE"
-
-    # Student email cleaning
-    print(student_cleaner.clean("   STUDENT123@TERPMAIL.UMD.EDU   "))
-    # Output: "student123@terpmail.umd.edu"
-
-    # Error in this one:
-    # print(student_cleaner.clean("notstudent@gmail.com"))
-```
+All AI-generated content was reviewed, modified, and validated by the team.
+Final responsibility for correctness and design decisions rests with the team.
