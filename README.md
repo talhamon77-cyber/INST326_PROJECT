@@ -61,7 +61,7 @@ All tests must pass before submission.
 ## Video Presentation
 
 📽️ Video link:
----
+
 ## AI Collaboration
 
 AI tools were used to assist with:
@@ -72,3 +72,4 @@ AI tools were used to assist with:
 
 All AI-generated content was reviewed, modified, and validated by the team.
 Final responsibility for correctness and design decisions rests with the team.
+---
