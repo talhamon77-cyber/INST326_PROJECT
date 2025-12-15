@@ -15,7 +15,6 @@ from typing import Any, Dict
 
 class AbstractProduct(ABC):
     """
-    Base class for products used in market analysis.
 
     This abstract class encapsulates common attributes and behavior for
     both physical and digital products, including sales volume, return
@@ -138,3 +137,80 @@ class AbstractProduct(ABC):
             f"name={self._name!r}, sales={self._sales!r}, returns={self._returns!r}, "
             f"satisfaction={self._satisfaction!r})"
         )
+
+#test
+
+import unittest
+from abstract_product import AbstractProduct
+
+
+class SimpleProduct(AbstractProduct):
+    """Concrete implementation for testing."""
+    
+    def calculate_trend_score(self) -> float:
+        """Simple trend score: sales minus returns times satisfaction."""
+        return (self.sales - self.returns) * self.satisfaction
+
+
+class TestAbstractProduct(unittest.TestCase):
+    
+    def test_valid_product_creation(self):
+        """Test creating a product with valid parameters."""
+        print("\n=== Test: Valid Product Creation ===")
+        product = SimpleProduct("Test Item", 100, 5, 4.5)
+        
+        print(f"Created product: {product}")
+        print(f"Name: {product.name}")
+        print(f"Sales: {product.sales}")
+        print(f"Returns: {product.returns}")
+        print(f"Satisfaction: {product.satisfaction}")
+        
+        self.assertEqual(product.name, "Test Item")
+        self.assertEqual(product.sales, 100)
+        self.assertEqual(product.returns, 5)
+        self.assertEqual(product.satisfaction, 4.5)
+    
+    def test_trend_score_calculation(self):
+        """Test that trend score is calculated."""
+        print("\n=== Test: Trend Score Calculation ===")
+        product = SimpleProduct("Trending Product", 200, 10, 4.0)
+        expected = (200 - 10) * 4.0
+        
+        print(f"Product: {product.name}")
+        print(f"Trend score: {product.calculate_trend_score()}")
+        
+        self.assertEqual(product.calculate_trend_score(), expected)
+    
+    def test_invalid_name(self):
+        """Test that empty name raises ValueError."""
+        print("\n=== Test: Invalid Name (Empty String) ===")
+        print("Attempting to create product with empty name...")
+        
+        with self.assertRaises(ValueError):
+            SimpleProduct("", 100, 5, 4.5)
+    
+    def test_invalid_sales(self):
+        """Test that zero sales raises ValueError."""
+        print("\n=== Test: Invalid Sales (Zero) ===")
+        print("Attempting to create product with 0 sales...")
+        
+        with self.assertRaises(ValueError):
+            SimpleProduct("Product", 0, 5, 4.5)
+    
+    def test_to_dict(self):
+        """Test dictionary conversion."""
+        print("\n=== Test: Dictionary Conversion ===")
+        product = SimpleProduct("Dict Test", 50, 2, 3.5)
+        result = product.to_dict()
+        
+        print(f"Product: {product.name}")
+        print(f"Dictionary output: {result}")
+        
+        self.assertEqual(result["name"], "Dict Test")
+        self.assertEqual(result["sales"], 50)
+        self.assertEqual(result["returns"], 2)
+        self.assertEqual(result["satisfaction"], 3.5)
+
+
+if __name__ == "__main__":
+    unittest.main()
