@@ -1,5 +1,25 @@
-## Computer Analyzer Function Library - Reference Guide
-This document provides comprehensive reference information for all functions in the computer analyzer library.
+from src import (
+    validate_experiment_parameters,
+    analyze_product_performance,
+    generate_market_insights_report
+)
 
-Table of Contents
+def main():
+    print(" Example 1: Validate Experiment Parameters")
+    params = {"sales": 1200, "satisfaction": 4.6, "price": 19.99}
+    print(validate_experiment_parameters(params))
 
+    print("\n Example 2: Analyze Product Performance")
+    result = analyze_product_performance(5000, 250, 4.2)
+    print(result)
+
+    print("\n Example 3: Generate Market Insights Report")
+    products = [
+        {"name": "SmartWatch X", "sales": 5000, "returns": 150, "satisfaction": 4.8},
+        {"name": "Earbuds Pro", "sales": 4000, "returns": 400, "satisfaction": 4.0},
+        {"name": "Fitness Tracker", "sales": 3000, "returns": 600, "satisfaction": 3.5}
+    ]
+    report = generate_market_insights_report(products)
+    print(report)
+
+    main()
