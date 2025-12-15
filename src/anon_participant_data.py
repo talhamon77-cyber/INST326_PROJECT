@@ -83,7 +83,6 @@ print(anonymize_participant_data(participants))
 from abc import ABC, abstractmethod
 from typing import List, Union
 import statistics
-import numpy as np
  # Abstract Base Class
 class AbstractAnalysis(ABC):
     

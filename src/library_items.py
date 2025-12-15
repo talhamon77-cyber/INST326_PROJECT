@@ -26,32 +26,7 @@ class ContentRecord:
     (validate_url_format, parse_csv_data, extract_keywords). This shows how
     related operations can live together on one object instead of being loose
     functions.
-
-    Attributes:
-        _record_id (str): Unique ID for this record inside the system.
-        _source_url (str): Where the content came from.
-        _text (str): The full text body of the content.
-        _csv_blob (Optional[str]): Raw CSV text associated with the record,
-            for example scraped table data. May be None.
-        _date_added (date): When this record was created in the system.
-        _parsed_rows (Optional[Union[List[Dict[str, object]], List[List[str]]]]):
-            Cached parsed CSV rows. Starts as None until parse_csv() runs.
-
-    Typical usage:
-        >>> rec = ContentRecord(
-        ...     record_id="A12",
-        ...     source_url="https://example.org/data",
-        ...     text="Banana bread is great. Banana pie is also great.",
-        ...     csv_blob="name,qty\\nPen,3\\nPencil,5"
-        ... )
-        >>> rec.is_url_valid()
-        True
-        >>> rec.extract_top_keywords(top_n=3)
-        ['banana', 'great', 'is']
-        >>> rec.parse_csv(type_map={"qty": int})
-        >>> rec.parsed_csv
-        [{'name': 'Pen', 'qty': 3}, {'name': 'Pencil', 'qty': 5}]
-    """
+"""
 
     def __init__(
         self,
@@ -295,11 +270,7 @@ class ContentRecord:
             TypeError: If self._text is not a string.
             ValidationError: If min_length < 1 or top_n is invalid.
 
-        Example:
-            >>> rec.text = "Banana bread is great. Banana pie is also great."
-            >>> rec.extract_top_keywords(top_n=3)
-            ['banana', 'great', 'is']
-        """
+     """
         output = extract_keywords(
             self._text,
             min_length=min_length,
@@ -341,9 +312,6 @@ class ContentRecord:
         Raises:
             TypeError, ValidationError: See extract_keywords.
 
-        Example:
-            >>> rec.keyword_counts(min_length=2, return_counts=True)
-            [('banana', 2), ('great', 2), ('is', 2), ('also', 1), ('bread', 1), ('pie', 1)]
         """
         counted = extract_keywords(
             self._text,
@@ -364,10 +332,7 @@ class ContentRecord:
         """
         Human readable summary.
 
-        Example output:
-            ContentRecord A12 (2025-11-02)
-            URL valid? True
-            120 chars of text
+        
         """
         preview_len = len(self._text)
         url_ok = False
@@ -384,9 +349,7 @@ class ContentRecord:
         )
 
     def __repr__(self) -> str:
-        """
-        Unambiguous debug representation. Safe to paste into logs.
-        """
+    
         return (
             f"ContentRecord(record_id={self._record_id!r}, "
             f"source_url={self._source_url!r}, "
@@ -430,12 +393,3 @@ class SearchEngine:
             snippet = result.get("snippet", "No description available.")
             formatted.append(f"{i}. {title}\n   {snippet}\n")    
         return "\n".join(formatted)
-        from collections import Counter
-
-def generate_data_report(data: list[dict]) -> dict:
-
-def anonymize_participant_data(participants: list[dict]) -> list[dict]:
-
-def clean_text_content(text: str) -> str:
-
-

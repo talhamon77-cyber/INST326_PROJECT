@@ -28,7 +28,7 @@ def validate_experiment_parameters(params):
 
 def analyze_product_performance(sales, returns, satisfaction):
      #Analyze a product's performance using sales, return rate, and satisfaction score.
-    
+    """
     Args:
         sales (int | float): Total number of units sold.
         returns (int | float): Number of returned products.
@@ -40,7 +40,7 @@ def analyze_product_performance(sales, returns, satisfaction):
     Raises:
         ValueError: If inputs are invalid or out of range.
         TypeError: If input types are incorrect.
-    
+    """
     # Input validation
     if not all(isinstance(x, (int, float)) for x in [sales, returns, satisfaction]):
         raise TypeError("All inputs must be numeric.")
