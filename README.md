@@ -42,11 +42,9 @@ reports to support decision-making and trend prediction.
 
 ---
 
-Running the Application
+Running the Application:
 
-From the repository root:
-
-python trend_app.py
+python demo.py
 
 
 The application will:
@@ -61,8 +59,6 @@ Export the report
 
 Save system state
 
-Running Tests
-python -m unittest discover
 
 
 All tests must pass before submission.
