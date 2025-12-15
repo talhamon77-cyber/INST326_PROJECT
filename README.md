@@ -60,7 +60,7 @@ All tests must pass before submission.
 
 ## Video Presentation
 
-📽️ Video link:
+📽️ Video link: https://drive.google.com/file/d/1rAD5b96fZeqT0QBjAtPOapqiT0Nt3XPj/view?usp=drive_link
 
 ## AI Collaboration
 
